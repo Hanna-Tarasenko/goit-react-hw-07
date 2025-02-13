@@ -2,28 +2,22 @@ import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
 import SearchBox from "./components/SearchBox/SearchBox";
-import { useDispatch, useSelector } from "react-redux";
-import { changeFilter } from "./redux/filtersSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchContacts } from "./redux/contactsOps";
 
 const App = () => {
   const dispatch = useDispatch();
-
-  const searchParam = useSelector((state) => state.filters.name);
-  const contacts = useSelector((state) => state.contacts.items);
-
-  const handleSearch = (value) => {
-    dispatch(changeFilter(value));
-  };
-  const foundContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(searchParam.toLowerCase())
-  );
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm />
-      <SearchBox searchParam={searchParam} handleSearch={handleSearch} />
-      <ContactList contacts={foundContacts} />
+      <SearchBox />
+      <ContactList />
     </div>
   );
 };
